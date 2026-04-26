@@ -1,53 +1,75 @@
 "use client";
 
 import MonorailTrack from "./components/MonorailTrack";
-import TimerControls from "./components/TimerControls";
-import TimeDisplay from "./components/TimeDisplay";
-import { useTimer } from "./hooks/useTimer";
+import PhaseDisplay from "./components/PhaseDisplay";
+import PomodoroControls from "./components/PomodoroControls";
+import { usePomodoro } from "./hooks/usePomodoro";
+
+const PHASE_BG: Record<string, string> = {
+  focus: "bg-slate-900",
+  shortBreak: "bg-[#0d1f12]",
+  longBreak: "bg-[#0d1520]",
+};
 
 export default function Home() {
-  const { remainingSeconds, totalSeconds, progress, state, setDuration, start, pause, reset } =
-    useTimer();
+  const {
+    phase,
+    timerState,
+    remainingSeconds,
+    totalSeconds,
+    progress,
+    completedSessions,
+    config,
+    start,
+    pause,
+    reset,
+    skip,
+    updateConfig,
+  } = usePomodoro();
 
   return (
-    <main className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-8 px-4 py-10">
-      {/* Header */}
+    <main
+      className={`min-h-screen flex flex-col items-center justify-center gap-6 px-4 py-10
+        transition-colors duration-700 ${PHASE_BG[phase]}`}
+    >
       <div className="text-center">
-        <h1 className="text-2xl md:text-3xl font-mono font-bold tracking-[0.2em] text-sky-400">
-          MONORAIL TIMER
+        <h1 className="text-xl md:text-2xl font-mono font-bold tracking-[0.25em] text-slate-300">
+          POMODORO MONORAIL
         </h1>
-        <p className="text-slate-500 text-xs font-mono tracking-widest mt-1">
-          モノレール式タイマー
+        <p className="text-slate-600 text-xs font-mono tracking-widest mt-1">
+          ポモドーロ式モノレールタイマー
         </p>
       </div>
 
-      {/* Track SVG */}
-      <div className="w-full flex justify-center px-4">
+      <div className="w-full flex justify-center px-2">
         <MonorailTrack
           progress={progress}
-          isFinished={state === "finished"}
-          isRunning={state === "running"}
+          phase={phase}
+          isRunning={timerState === "running"}
+          isFinished={timerState === "finished"}
         />
       </div>
 
-      {/* Time display */}
-      <TimeDisplay
+      <PhaseDisplay
+        phase={phase}
+        timerState={timerState}
         remainingSeconds={remainingSeconds}
-        totalSeconds={totalSeconds}
-        state={state}
+        completedSessions={completedSessions}
+        sessionsUntilLongBreak={config.sessionsUntilLongBreak}
       />
 
-      {/* Controls */}
-      <TimerControls
-        state={state}
+      <PomodoroControls
+        phase={phase}
+        timerState={timerState}
+        config={config}
         onStart={start}
         onPause={pause}
         onReset={reset}
-        onSetDuration={setDuration}
+        onSkip={skip}
+        onUpdateConfig={updateConfig}
       />
 
-      {/* Footer */}
-      <footer className="text-slate-700 text-xs font-mono tracking-wider mt-4">
+      <footer className="text-slate-700 text-xs font-mono tracking-wider mt-2">
         発力研究所
       </footer>
     </main>

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "モノレール式タイマー | MONORAIL TIMER",
-  description: "モノレールが走るビジュアルタイマー。発力研究所。",
+  title: "ポモドーロ式モノレールタイマー | 発力研究所",
+  description: "モノレールが走るポモドーロタイマー。集中25分・休憩5分のサイクル管理。発力研究所。",
 };
 
 export default function RootLayout({
