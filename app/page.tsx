@@ -1,77 +1,34 @@
 "use client";
 
-import MonorailTrack from "./components/MonorailTrack";
-import PhaseDisplay from "./components/PhaseDisplay";
-import PomodoroControls from "./components/PomodoroControls";
-import { usePomodoro } from "./hooks/usePomodoro";
-
-const PHASE_BG: Record<string, string> = {
-  focus: "bg-slate-900",
-  shortBreak: "bg-[#0d1f12]",
-  longBreak: "bg-[#0d1520]",
-};
+import PomodoroTimer from "./components/PomodoroTimer";
 
 export default function Home() {
-  const {
-    phase,
-    timerState,
-    remainingSeconds,
-    totalSeconds,
-    progress,
-    completedSessions,
-    config,
-    start,
-    pause,
-    reset,
-    skip,
-    updateConfig,
-  } = usePomodoro();
-
   return (
-    <main
-      className={`min-h-screen flex flex-col items-center justify-center gap-6 px-4 py-10
-        transition-colors duration-700 ${PHASE_BG[phase]}`}
-    >
-      <div className="text-center">
-        <h1 className="text-xl md:text-2xl font-mono font-bold tracking-[0.25em] text-slate-300">
-          POMODORO MONORAIL
-        </h1>
-        <p className="text-slate-600 text-xs font-mono tracking-widest mt-1">
-          ポモドーロ式モノレールタイマー
-        </p>
-      </div>
-
-      <div className="w-full flex justify-center px-2">
-        <MonorailTrack
-          progress={progress}
-          phase={phase}
-          isRunning={timerState === "running"}
-          isFinished={timerState === "finished"}
-        />
-      </div>
-
-      <PhaseDisplay
-        phase={phase}
-        timerState={timerState}
-        remainingSeconds={remainingSeconds}
-        completedSessions={completedSessions}
-        sessionsUntilLongBreak={config.sessionsUntilLongBreak}
+    <main className="min-h-screen bg-[#0a0a0f] flex flex-col items-center justify-center px-4 py-12">
+      {/* Background grid */}
+      <div className="fixed inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: "48px 48px",
+        }}
       />
 
-      <PomodoroControls
-        phase={phase}
-        timerState={timerState}
-        config={config}
-        onStart={start}
-        onPause={pause}
-        onReset={reset}
-        onSkip={skip}
-        onUpdateConfig={updateConfig}
-      />
+      <div className="relative z-10 flex flex-col items-center gap-10 w-full">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-2xl font-mono font-bold tracking-[0.15em] text-white">
+            POMODORO
+          </h1>
+          <p className="text-slate-600 text-xs font-mono tracking-[0.3em] mt-1">
+            ポモドーロタイマー ／ 発力研究所
+          </p>
+        </div>
 
-      <footer className="text-slate-700 text-xs font-mono tracking-wider mt-2">
-        発力研究所
-      </footer>
+        <PomodoroTimer />
+      </div>
     </main>
   );
 }
